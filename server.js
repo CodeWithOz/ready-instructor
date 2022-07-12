@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
+const bodyParser = require('body-parser');
 const { logger } = require('./helpers');
 const routeHandler = require('./routes');
 const app = express();
@@ -9,6 +10,8 @@ const isProd = process.env.NODE_ENV === 'production';
 
 app.use(cors);
 app.use(require('morgan')('dev'));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(routeHandler);
 
 // catch 404s
