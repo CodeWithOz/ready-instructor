@@ -8,6 +8,7 @@ const app = express();
 const isProd = process.env.NODE_ENV === 'production';
 
 app.use(cors);
+app.use(require('morgan')('dev'));
 app.use(routeHandler);
 
 // catch 404s
