@@ -21,8 +21,8 @@ router.post(
     [
         body('title').trim().notEmpty().escape(),
         body('description').trim().notEmpty().escape(),
-        body('duration').isNumeric(),
-        body('start').isNumeric(),
+        body('duration').isInt({ gt: 0 }),
+        body('start').isInt({ gt: 0 }),
         body('bookingId').isMongoId(),
         body('bookedEducators')
             .isArray()
@@ -56,7 +56,7 @@ router.post(
             title,
             description,
             duration,
-            start,
+            start: new Date(start),
             bookingId,
             bookedEducators,
         })
