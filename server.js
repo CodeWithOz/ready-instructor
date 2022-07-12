@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
+const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { logger } = require('./helpers');
 const routeHandler = require('./routes');
@@ -12,6 +13,20 @@ app.use(cors);
 app.use(require('morgan')('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+mongoose
+    .connect(process.env.MONGO_CONNECTION_STRING)
+    .then(connection => {
+        logger('connected to mongodb cluster');
+    })
+    .catch(error => {
+        logger('error connecting to mongodb cluster', error);
+        process.exit();
+    });
+if (!isProd) {
+    mongoose.set('debug', true);
+}
+
 app.use(routeHandler);
 
 // catch 404s
