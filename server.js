@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 mongoose
-    .connect(process.env.MONGO_CONNECTION_STRING)
+    .connect(encodeURI(process.env.MONGO_CONNECTION_STRING))
     .then(connection => {
         logger('connected to mongodb cluster');
     })
