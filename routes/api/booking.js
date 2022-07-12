@@ -1,8 +1,8 @@
 const router = require('express').Router();
 const { body, validationResult } = require('express-validator');
 const validator = require('validator').default;
-const Booking = require('../../../models/Booking');
-const { logger } = require('../../../helpers');
+const Booking = require('../../models/Booking');
+const { logger } = require('../../helpers');
 
 router.get('/:bookingId', (req, res, next) => {
     const { bookingId } = req.params;
@@ -67,3 +67,5 @@ router.post(
             .catch(next);
     }
 );
+
+module.exports = router;
