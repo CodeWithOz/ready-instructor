@@ -68,4 +68,40 @@ router.post(
     }
 );
 
+router.post(
+    '/cancel/:bookingEventId',
+    [body('canceledBy').isMongoId()],
+    (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            logger(
+                'validation errors at POST /event/cancel:',
+                JSON.stringify(errors.array())
+            );
+            return next(errors);
+        }
+        next();
+    },
+    (req, res, next) => {
+        const { canceledBy } = req.body;
+        const { bookingEventId } = req.params;
+        BookingEvent.updateOne(
+            {
+                _id: bookingEventId,
+            },
+            {
+                $set: {
+                    canceled: true,
+                    canceledBy,
+                },
+            }
+        )
+            .then(outcome => {
+                logger('outcome of canceling event:', outcome);
+                res.status(200).json({ success: true });
+            })
+            .catch(next);
+    }
+);
+
 module.exports = router;
